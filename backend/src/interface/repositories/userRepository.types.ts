@@ -24,18 +24,6 @@ export type GetUserOutput = {
   readonly updatedAt: Date;
 };
 
-
-export type GetuserProfileOutput = {
-  readonly _id: string;
-  readonly username: string;
-  readonly email: string;
-  readonly phone: string;
-  readonly password: string;
-  readonly createdAt: Date;
-  readonly updatedAt: Date;
-};
-
-
 export type SuccessResponse ={
   status: string;       
   message: string;      

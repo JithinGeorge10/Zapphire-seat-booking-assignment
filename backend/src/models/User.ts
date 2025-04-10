@@ -1,51 +1,48 @@
-import { Model, DataTypes, Sequelize } from "sequelize";
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  PrimaryKey,
+  AutoIncrement,
+  CreatedAt,
+  UpdatedAt,
+  Unique,
+} from 'sequelize-typescript';
 
-export default (sequelize: Sequelize) => {
-  class User extends Model {
-    public id!: number;
-    public username!: string;
-    public email!: string;
-    public phone!: string;
-    public password!: string;
+@Table({ tableName: 'users' })
+export class User extends Model {
+  @PrimaryKey
+  @AutoIncrement
+  @Column(DataType.INTEGER)
+  id!: number;
 
-    public readonly createdAt!: Date;
-    public readonly updatedAt!: Date;
-  }
+  @Unique('unique_username')
+  @Column(DataType.STRING)
+  username!: string;
 
-  User.init(
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      username: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-      },
-      email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-      },
-      phone: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-      },
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-    },
-    {
-      sequelize,
-      tableName: "users",
-      modelName: "User",
-      timestamps: true,
-    }
-  );
+  @Unique('unique_email')
+  @Column(DataType.STRING)
+  email!: string;
 
-  return User;
-};
+  @Unique('unique_phone')
+  @Column(DataType.STRING)
+  phone!: string;
+
+  @Column(DataType.STRING)
+  password!: string;
+
+  @CreatedAt
+  @Column({
+    field: 'created_at',
+    type: DataType.DATE, 
+  })
+  createdAt!: Date;
+
+  @UpdatedAt
+  @Column({ 
+    field: 'updated_at' ,
+    type: DataType.DATE,
+  })
+  updatedAt!: Date;
+}

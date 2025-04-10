@@ -1,23 +1,21 @@
-
-import {Client} from 'pg'
-import dotenv from 'dotenv';
-dotenv.config();
-
-import { PG_URI } from '../utils/constants';
-const client = new Client({
-  connectionString: PG_URI(),
-  ssl: {
-    rejectUnauthorized: false, // Important for Render SSL
-  }
+import { Sequelize } from 'sequelize-typescript';
+import { User } from '../models/User';
+import {DB_NAME,DB_USER,DB_PASSWORD,DB_HOST} from '../utils/constants'
+export const sequelize = new Sequelize({
+    database: DB_NAME(),
+    username: DB_USER(),
+    password: DB_PASSWORD(),
+    host: DB_HOST(),
+    port: 5432,  
+    dialect: 'postgres',
+    models: [User],
+    logging: false,
+    ssl: true,  
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    }
 });
 
-client.query('SELECT NOW()', (err:any,res:any) => {
-  if (err) {
-    console.error(err.stack);
-  } else {
-    console.log('Current time:', res.rows[0]);
-  }
-  client.end();
-});
-
-export default client

@@ -14,7 +14,8 @@ export class UserController implements IUserController {
     try {
       const { username, email, phone, password } =
         httpRequest.body;
-
+      console.log('usercontroller' + username)
+      console.log(username, email, phone, password)
       const user = await this.userService.userSignup({
         username,
         email,
@@ -75,5 +76,5 @@ export class UserController implements IUserController {
   //     };
   //   }
   // };
- 
+
 }
