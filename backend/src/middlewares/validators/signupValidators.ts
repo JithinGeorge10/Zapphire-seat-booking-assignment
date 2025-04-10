@@ -7,7 +7,7 @@ export function signupValidator(
   next: NextFunction
 ) {
   try {
-    const { username, email, phone, password, age, address, gender } = req.body;
+    const { username, email, phone, password} = req.body;
 
     if (!username) throw new Error("Username is required");
     if (
@@ -35,21 +35,7 @@ export function signupValidator(
       );
     }
 
-    if (!age) throw new Error("Age is required");
-    if (Number(age) < 1 || Number(age) > 100) {
-      throw new Error("Age must be a number between 1 and 100");
-    }
-
-    if (!address) throw new Error("Address is required");
-    if (!validator.isLength(address, { max: 50 })) {
-      throw new Error("Address must be less than 50 characters");
-    }
-
-    if (!gender) throw new Error("Gender is required");
-    const validGenders = ["male", "female", "other"];
-    if (!validGenders.includes(gender)) {
-      throw new Error("Gender must be 'male', 'female', or 'other'");
-    }
+    
 
     next();
   } catch (e: any) {

@@ -1,51 +1,51 @@
-import { Schema, model } from "mongoose";
-import { userValidators } from "./User.validator"; // Adjust the import path as necessary
+import { Model, DataTypes, Sequelize } from "sequelize";
 
-const UserSchema = new Schema(
-  {
-    username: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
-      validate: {
-        validator: userValidators.username.validator,
-        message: userValidators.username.message,
-      },
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
-      lowercase: true,
-      validate: {
-        validator: userValidators.email.validator,
-        message: userValidators.email.message,
-      },
-    },
-    phone: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
-      validate: {
-        validator: userValidators.phone.validator,
-        message: userValidators.phone.message,
-      },
-    },
-    password: {
-      type: String,
-      required: true,
-      validate: {
-        validator: userValidators.password.validator,
-        message: userValidators.password.message,
-      },
-    },
-  },
-  {
-    timestamps: true,
+export default (sequelize: Sequelize) => {
+  class User extends Model {
+    public id!: number;
+    public username!: string;
+    public email!: string;
+    public phone!: string;
+    public password!: string;
+
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
   }
-);
 
-export default model("User", UserSchema);
+  User.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      phone: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+    },
+    {
+      sequelize,
+      tableName: "users",
+      modelName: "User",
+      timestamps: true,
+    }
+  );
+
+  return User;
+};

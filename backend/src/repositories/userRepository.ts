@@ -1,57 +1,44 @@
 import { IUserRepository } from "../interface/repositories/userRepository.interface";
 import {
   AddUserInput,
-  AddUserOuput,
+  AddUserOutput,
   GetUserOutput,
 } from "../interface/repositories/userRepository.types";
+import { UniqueConstraintError } from "sequelize";
 
-import User from "../models/User";
+import { User } from "../models";
 
 export class UserRepository implements IUserRepository {
-  addUser = async (userData: AddUserInput): Promise<AddUserOuput> => {
-    try {
-      const user = await User.create({
-        ...userData,
-      });
-
-      return {
-        _id: user._id.toString(),
-        username: user.username,
-        email: user.email,
-        phone: user.phone,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      };
-    } catch (error: any) {
-      console.error("Error adding user:", error);
-      if (error.code === 11000) {
-        const field = Object.keys(error.keyValue)[0]; 
-        const value = error.keyValue[field]; 
-        error.message = `${field} '${value}' already exists.`;
-      }
-      throw new Error(error.message);
-    }
-  };
-  getUserByEmail = async (email: string): Promise<GetUserOutput> => {
-    try {
-      const user = await User.findOne({ email });
-      if (!user) throw new Error("User not found");
-
-      return {
-        _id: user._id.toString(),
-        username: user.username,
-        email: user.email,
-        phone: user.phone,
-        password: user.password,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      };
-    } catch (error: any) {
-      console.error("Error getting user by email:", error);
-
-      throw new Error(error.message);
-    }
-  };
+    addUser = async (userData: AddUserInput): Promise<AddUserOutput> => {
+        try {
+          const user = await User.create({
+            username: userData.username,
+            email: userData.email,
+            phone: userData.phone,
+            password: userData.password,
+          });
+    
+          return {
+            _id: user.id.toString(),
+            username: user.username,
+            email: user.email,
+            phone: user.phone,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+          };
+        } catch (error: any) {
+          console.error("Error adding user:", error);
+    
+          if (error instanceof UniqueConstraintError) {
+            const field = error.errors[0].path;
+            const value = error.errors[0].value;
+            throw new Error(`${field} '${value}' already exists.`);
+          }
+    
+          throw new Error(error.message || "Something went wrong while adding user.");
+        }
+      };    
+  
 
 
 }

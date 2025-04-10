@@ -5,7 +5,7 @@ export type AddUserInput = {
   password: string;
 };
 
-export type AddUserOuput = {
+export type AddUserOutput = {
   readonly _id: string;
   readonly username: string;
   readonly email: string;
