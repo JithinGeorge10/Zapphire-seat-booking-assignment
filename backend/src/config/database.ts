@@ -1,8 +1,11 @@
 
 import {Client} from 'pg'
+import dotenv from 'dotenv';
+dotenv.config();
 
+import { PG_URI } from '../utils/constants';
 const client = new Client({
-  connectionString: 'postgresql://zapphire_task_ticket_booking_user:LOR4cBxrsbI19uc3Zpg02CVw7Ck2rRN7@dpg-cvr6thogjchc73bohrd0-a.singapore-postgres.render.com/zapphire_task_ticket_booking',
+  connectionString: PG_URI(),
   ssl: {
     rejectUnauthorized: false, // Important for Render SSL
   }
