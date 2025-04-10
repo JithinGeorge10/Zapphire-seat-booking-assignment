@@ -1,5 +1,6 @@
 'use client'
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 
 const ROW_SIZE = 7;
 const TOTAL_SEATS = 80;
@@ -11,6 +12,11 @@ const TicketBooking: React.FC = () => {
   const [bookedSeatsPreview, setBookedSeatsPreview] = useState<number[]>([]);
 
   const handleBooking = (): void => {
+
+    if (numSeatsToBook > 7) {
+      toast.error('You can only book up to 7 seats.');
+      return;
+    }
     if (bookedSeats.length + numSeatsToBook > TOTAL_SEATS) return;
 
     const isSeatBooked = (seat: number): boolean => bookedSeats.includes(seat);
@@ -39,9 +45,15 @@ const TicketBooking: React.FC = () => {
       );
       newBookings = availableSeats.slice(0, numSeatsToBook);
     }
-
     setBookedSeats((prevSeats) => [...prevSeats, ...newBookings])
     setBookedSeatsPreview(newBookings)
+    toast.success('Seat successfully booked', {
+      style: {
+        background: 'green',
+        color: 'white',
+      },
+    });
+    
   };
 
   const handleReset = () => {
@@ -58,7 +70,7 @@ const TicketBooking: React.FC = () => {
   console.log(bookedSeatsPreview)
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 ">
-      <h1 className="text-3xl text-black font-bold ">Ticket Booking</h1>
+      <h1 className="text-3xl text-black font-bold">Ticket Booking</h1>
 
       <div className="flex flex-col md:flex-row gap-100">
 
@@ -77,6 +89,8 @@ const TicketBooking: React.FC = () => {
               </div>
             );
           })}
+          <br />
+
         </div>
 
 
@@ -103,7 +117,7 @@ const TicketBooking: React.FC = () => {
 
             <input
 
-              className="border border-blue-600 p-2 text-black rounded-md min-w-96"
+              className="border border-blue-600 p-2 text-blue-500 rounded-md min-w-96"
               value={numSeatsToBook}
               min={1}
               max={TOTAL_SEATS - bookedSeats.length}
@@ -124,12 +138,14 @@ const TicketBooking: React.FC = () => {
           >
             Reset Booking
           </button>
+
         </div>
+
       </div>
 
-      <div className="mt-6 flex gap-6 text-lg">
-        <span className="bg-yellow-400 text-black px-3 py-1 rounded">Booked Seats = {bookedSeats.length}</span>
-        <span className="bg-green-400 text-black px-3 py-1 rounded">
+      <div className="mt-6 flex gap-6 text-lg ">
+        <span className="bg-yellow-400 text-black font-semibold px-3 py-1 rounded">Booked Seats = {bookedSeats.length}</span>
+        <span className="bg-green-400 text-black font-semibold px-3 py-1 rounded">
           Available Seats = {TOTAL_SEATS - bookedSeats.length}
         </span>
       </div>
