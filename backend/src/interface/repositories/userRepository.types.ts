@@ -3,9 +3,6 @@ export type AddUserInput = {
   email: string;
   phone: string;
   password: string;
-  age: string;
-  address: string;
-  gender?: string;
 };
 
 export type AddUserOuput = {
@@ -13,9 +10,6 @@ export type AddUserOuput = {
   readonly username: string;
   readonly email: string;
   readonly phone: string;
-  readonly age: string;
-  readonly address: string;
-  readonly gender?: string;
   readonly createdAt: Date;
   readonly updatedAt: Date;
 };
@@ -26,9 +20,6 @@ export type GetUserOutput = {
   readonly email: string;
   readonly phone: string;
   readonly password: string;
-  readonly age: string;
-  readonly address: string;
-  readonly gender?: string;
   readonly createdAt: Date;
   readonly updatedAt: Date;
 };
@@ -40,10 +31,6 @@ export type GetuserProfileOutput = {
   readonly email: string;
   readonly phone: string;
   readonly password: string;
-  readonly profilePic:string
-  readonly age: string;
-  readonly address: string;
-  readonly gender?: string;
   readonly createdAt: Date;
   readonly updatedAt: Date;
 };
@@ -54,6 +41,3 @@ export type SuccessResponse ={
   message: string;      
                
   }
-
-  export type PostDatas= Array<{ [key: string]: any }>
-  export type CommentDatas= Array<{ [key: string]: any }>

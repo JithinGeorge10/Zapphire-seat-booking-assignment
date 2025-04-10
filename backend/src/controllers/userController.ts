@@ -19,10 +19,7 @@ export class UserController implements IUserController {
         username,
         email,
         phone,
-        password,
-        age,
-        address,
-        gender,
+        password
       });
       const { accessToken, refreshToken } = user;
 

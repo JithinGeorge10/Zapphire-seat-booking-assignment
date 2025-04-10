@@ -42,39 +42,6 @@ const UserSchema = new Schema(
         message: userValidators.password.message,
       },
     },
-    age: {
-      type: Number,
-      required: true,
-      validate: {
-        validator: userValidators.age.validator,
-        message: userValidators.age.message,
-      },
-    },
-    address: {
-      type: String,
-      required: true,
-      validate: {
-        validator: userValidators.address.validator,
-        message: userValidators.address.message,
-      },
-    },
-    gender: {
-      type: String,
-      required: true,
-      validate: {
-        validator: userValidators.gender.validator,
-        message: userValidators.gender.message,
-      },
-    },
-    jobRole: {
-      type: String,
-      default: false, // Default value set to `false`
-      
-    },
-    profilePic: {
-      type: String,
-      default: false, // Default value set to `false`
-    },
   },
   {
     timestamps: true,
