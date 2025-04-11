@@ -6,10 +6,9 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
-import { setUserDetails } from "../../store/slices/userSlice";
+import { setUserDetails } from "../../../store/slices/userSlice";
 import { useDispatch } from "react-redux";
-import { signupApi } from "../../service/userApi/page";
-
+import { signupApi } from "../../../service/userApi/page";
 interface SignUpFormValues {
     username: string;
     email: string;
@@ -44,6 +43,7 @@ function SignUp() {
         try {
             setLoading(true);
             const response = await signupApi(data);
+            console.log(response)
             if (response.data) {
                 toast.success("Sign Up successful! Please verify your email.");
                 dispatch(

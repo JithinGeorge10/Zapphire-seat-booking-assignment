@@ -6,9 +6,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { setUserDetails } from "../../store/slices/userSlice";
+import { setUserDetails } from "../../../store/slices/userSlice";
 import { useDispatch } from "react-redux";
-import { loginApi } from "../../service/userApi/page";
+import { loginApi } from "../../../service/userApi/page";
 
 interface LoginFormValues extends FieldValues {
   email: string;
