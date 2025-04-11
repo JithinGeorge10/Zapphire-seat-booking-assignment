@@ -32,7 +32,7 @@ function Login() {
     try {
       setLoading(true);
       const response = await loginApi(data);
-
+  
       if (response.data) {
         dispatch(
           setUserDetails({
@@ -42,6 +42,7 @@ function Login() {
             isAuthenticated: true,
           })
         );
+
 
         toast.success(`Welcome back,${response.data.username}!`, {
           position: "top-center",

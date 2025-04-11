@@ -4,19 +4,19 @@ import { jwtVerify } from "jose";
 
 
 
-const USER_ROUTES = new Set([ '/user/home']);
+const USER_ROUTES = new Set(['/user/home']);
 const PUBLIC_ROUTES = new Set([
-  "/user/login", 
-  "/user/signup", 
+  "/user/login",
+  "/user/signup",
 ]);
 
 
 
 const UNPROTECTED_ROUTES = new Set(["/_next/", "/favicon.ico", "/api/"]);
 
-export async function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest,res:any) {
+  
   const { pathname } = req.nextUrl;
-
   if ([...UNPROTECTED_ROUTES].some(route => pathname.startsWith(route)) || pathname === "/") {
     console.log(`Allowing access to public route: ${pathname}`);
     return NextResponse.next();
@@ -30,7 +30,7 @@ export async function middleware(req: NextRequest) {
   // Verify token to get role
   const tokenData = await verifyToken("refreshToken", req);
   const role = tokenData?.role;
-  console.log('ROLEX',role)
+  console.log('ROLEX', role)
   if (!role) {
     console.log(`Redirecting unauthenticated user from ${pathname} to /login`);
     return NextResponse.redirect(new URL("/user/login", req.url));
@@ -49,11 +49,13 @@ export async function middleware(req: NextRequest) {
 
 
 async function verifyToken(tokenName: string, req: NextRequest): Promise<{ role: string | null }> {
+
+  const token = req.cookies.get(tokenName);
+  console.log('hhh');
   
-  const token = req.cookies.get(tokenName);  
   console.log(req.cookies);
   console.log(token?.value, '------------------------------------------');
-  
+
   if (!token?.value) {
     console.error("Token not found in cookies");
     return { role: null };
@@ -71,7 +73,7 @@ async function verifyToken(tokenName: string, req: NextRequest): Promise<{ role:
     const { payload } = await jwtVerify(token.value, new TextEncoder().encode(secret));
     console.log('decoded payload', payload);
 
-  
+
     const role = payload?.role as string | undefined;  // Type assertion to string
 
     if (!role) {
