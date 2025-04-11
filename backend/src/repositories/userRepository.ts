@@ -39,7 +39,27 @@ export class UserRepository implements IUserRepository {
         }
     };
 
-
+    getUserByEmail = async (email: string): Promise<GetUserOutput> => {
+        try {
+            const user = await User.findOne({ where: { email } });
+    
+            if (!user) throw new Error("User not found");
+    
+            return {
+                _id: user.id.toString(),
+                username: user.username,
+                email: user.email,
+                phone: user.phone,
+                password: user.password,
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt,
+            };
+        } catch (error: any) {
+            console.error("Error retrieving user by email:", error);
+            throw new Error(error.message || "Something went wrong while retrieving user.");
+        }
+    };
+    
 
 }
 

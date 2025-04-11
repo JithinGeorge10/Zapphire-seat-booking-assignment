@@ -47,34 +47,34 @@ export class UserController implements IUserController {
     }
   };
 
-  // userLogin = async (httpRequest: Request): Promise<ControllerResponse> => {
-  //   try {
-  //     const { email, password } = httpRequest.body;
+  userLogin = async (httpRequest: Request): Promise<ControllerResponse> => {
+    try {
+      const { email, password } = httpRequest.body;
 
-  //     const user = await this.userService.userLogin(email, password);
-  //     const { accessToken, refreshToken } = user;
+      const user = await this.userService.userLogin(email, password);
+      const { accessToken, refreshToken } = user;
 
-  //     return {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       statusCode: 200,
-  //       body: user,
-  //       accessToken,
-  //       refreshToken,
-  //     };
-  //   } catch (e: any) {
-  //     console.log(e);
-  //     return {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       statusCode: e.statusCode || 500,
-  //       body: {
-  //         error: e.message,
-  //       },
-  //     };
-  //   }
-  // };
+      return {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        statusCode: 200,
+        body: user,
+        accessToken,
+        refreshToken,
+      };
+    } catch (e: any) {
+      console.log(e);
+      return {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        statusCode: e.statusCode || 500,
+        body: {
+          error: e.message,
+        },
+      };
+    }
+  };
 
 }

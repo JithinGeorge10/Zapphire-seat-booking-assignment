@@ -43,7 +43,6 @@ function SignUp() {
         try {
             setLoading(true);
             const response = await signupApi(data);
-            console.log(response)
             if (response.data) {
                 toast.success("Sign Up successful! Please verify your email.");
                 dispatch(

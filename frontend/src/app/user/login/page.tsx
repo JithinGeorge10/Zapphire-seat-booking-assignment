@@ -25,11 +25,12 @@ function Login() {
   const router = useRouter();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
-
+    const [loading, setLoading] = useState(false);
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
     try {
+      setLoading(true);
       const response = await loginApi(data);
 
       if (response.data) {
@@ -42,13 +43,7 @@ function Login() {
           })
         );
 
-        toast.success(`Welcome back, Dr. ${response.data.username}!`, {
-          position: "top-center",
-          autoClose: 2000,
-          theme: "colored",
-        });
-
-        toast.info("Redirecting to your dashboard...", {
+        toast.success(`Welcome back,${response.data.username}!`, {
           position: "top-center",
           autoClose: 2000,
           theme: "colored",
@@ -60,6 +55,7 @@ function Login() {
       }
     } catch (error: any) {
       if (axios.isAxiosError(error)) {
+        setLoading(false)
         const errorMessage =
           error.response?.data?.error || "Please check your email & password";
         toast.error(errorMessage);
@@ -119,7 +115,7 @@ function Login() {
             type="submit"
             className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 rounded mt-4 transition duration-300 transform "
           >
-            Login
+          {loading ? "Logging in..." : "Login"}
           </button>
 
           {/* Divider */}

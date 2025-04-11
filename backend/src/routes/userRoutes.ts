@@ -19,9 +19,9 @@ router
   .route("/signup")
   .post(signupValidator, expressCallback(controller.userSignup));
 
-// router
-//   .route("/login")
-//   .post(loginValidator, expressCallback(controller.userLogin));
+router
+  .route("/login")
+  .post(loginValidator, expressCallback(controller.userLogin));
 
 
 
