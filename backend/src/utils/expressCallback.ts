@@ -46,7 +46,7 @@ export function expressCallback(controller: any) {
 
         });
       }
-
+ 
       res.type("json");
       res.status(httpResponse.statusCode).send(httpResponse.body);
     } catch (e: any) {
