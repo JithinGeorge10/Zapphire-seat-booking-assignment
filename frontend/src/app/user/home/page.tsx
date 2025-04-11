@@ -163,7 +163,7 @@ const TicketBooking: React.FC = () => {
                         <input
 
                             className="border border-blue-600 p-2 text-blue-500 rounded-md min-w-96"
-                            value={numSeatsToBook}
+                    
                             min={1}
                             max={TOTAL_SEATS - bookedSeats.length}
                             onChange={handleSeatChange}
