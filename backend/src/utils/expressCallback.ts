@@ -32,7 +32,7 @@ export function expressCallback(controller: any) {
         res.cookie("accessToken", httpResponse.accessToken, {
           httpOnly: false,
           secure: true,
-          sameSite: "none",
+          sameSite: "lax" ,
           domain: ".zapphire-seat-booking-assignment.vercel.app",
           
         });
@@ -42,7 +42,7 @@ export function expressCallback(controller: any) {
         res.cookie("refreshToken", httpResponse.refreshToken, {
           httpOnly: true,
           secure: true,
-          sameSite: "none",
+          sameSite: "lax" ,
           domain: ".zapphire-seat-booking-assignment.vercel.app",
 
         });
