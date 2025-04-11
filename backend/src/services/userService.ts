@@ -1,7 +1,7 @@
 import { IUserRepository } from "../interface/repositories/userRepository.interface";
 import { IUserService } from "../interface/services/userService.interface";
 import {
-
+    UserPayload,
     UserSignupInput,
     UserSignupOutput,
 } from "../interface/services/userService.types";
@@ -40,33 +40,44 @@ export class UserService implements IUserService {
         }
     };
 
-      userLogin = async (
+    userLogin = async (
         email: string,
         password: string
-      ): Promise<UserSignupOutput> => {
+    ): Promise<UserSignupOutput> => {
         try {
-          const user = await this.userRepository.getUserByEmail(email);
+            const user = await this.userRepository.getUserByEmail(email);
 
-          const isValidPassword = comparePassword(password, user.password);
-          if (!isValidPassword) throw new AppError("Invalid Credentials", 401);
+            const isValidPassword = comparePassword(password, user.password);
+            if (!isValidPassword) throw new AppError("Invalid Credentials", 401);
 
-          const accessToken = generateAccessToken(user._id, "user");
-          const refreshToken = generateRefreshToken(user._id, "user");
+            const accessToken = generateAccessToken(user._id, "user");
+            const refreshToken = generateRefreshToken(user._id, "user");
 
-          return {
-            _id: user._id,
-            username: user.username,
-            email: user.email,
-            phone: user.phone,
-            createdAt: user.createdAt,
-            updatedAt: user.updatedAt,
-            accessToken,
-            refreshToken,
-          };
+            return {
+                _id: user._id,
+                username: user.username,
+                email: user.email,
+                phone: user.phone,
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt,
+                accessToken,
+                refreshToken,
+            };
         } catch (error: any) {
-          console.log("Error in user service", error.message);
-          throw new Error(error.message);
+            console.log("Error in user service", error.message);
+            throw new Error(error.message);
         }
-      };
+    };
+
+    seatBook = async ( user: UserPayload,seatNumber: any) => {
+        try {
+
+            const seat = await this.userRepository.bookSeat(user.id,seatNumber);
+            return {user}
+        } catch (error: any) {
+            console.log("Error in user service", error.message);
+            throw new Error(error.message);
+        }
+    };
 
 }

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import axiosInstance from "../../../components/utils/axiosinstance";
-
+import { bookedSeatApi } from "../../../service/userApi/page";
 const ROW_SIZE = 7;
 const TOTAL_SEATS = 80;
 
@@ -12,51 +12,58 @@ const TicketBooking: React.FC = () => {
     const [numSeatsToBook, setNumSeatsToBook] = useState<number>(0);
     const [bookedSeatsPreview, setBookedSeatsPreview] = useState<number[]>([]);
 
-    const handleBooking = (): void => {
+    const handleBooking = async(): Promise<void> => {
 
-        if (numSeatsToBook > 7) {
-            toast.error('You can only book up to 7 seats.');
-            return;
-        }
-        if (bookedSeats.length + numSeatsToBook > TOTAL_SEATS) return;
-
-
-
-
-        const isSeatBooked = (seat: number): boolean => bookedSeats.includes(seat);
-        let newBookings: number[] = [];
+        try {
+            if (numSeatsToBook > 7) {
+                toast.error('You can only book up to 7 seats.');
+                return;
+            }
+            if (bookedSeats.length + numSeatsToBook > TOTAL_SEATS) return;
 
 
-        for (let rowStart = 1; rowStart <= TOTAL_SEATS; rowStart += ROW_SIZE) {
-            const rowEnd = Math.min(rowStart + ROW_SIZE - 1, TOTAL_SEATS);
 
-            for (let i = rowStart; i <= rowEnd - numSeatsToBook + 1; i++) {
-                const block: number[] = Array.from({ length: numSeatsToBook }, (_, idx) => i + idx);
 
-                const isBlockAvailable = block.every((seat) => !isSeatBooked(seat));
-                if (isBlockAvailable) {
-                    newBookings = block;
-                    break;
+            const isSeatBooked = (seat: number): boolean => bookedSeats.includes(seat);
+            let newBookings: number[] = [];
+
+
+            for (let rowStart = 1; rowStart <= TOTAL_SEATS; rowStart += ROW_SIZE) {
+                const rowEnd = Math.min(rowStart + ROW_SIZE - 1, TOTAL_SEATS);
+
+                for (let i = rowStart; i <= rowEnd - numSeatsToBook + 1; i++) {
+                    const block: number[] = Array.from({ length: numSeatsToBook }, (_, idx) => i + idx);
+
+                    const isBlockAvailable = block.every((seat) => !isSeatBooked(seat));
+                    if (isBlockAvailable) {
+                        newBookings = block;
+                        break;
+                    }
                 }
+
+                if (newBookings.length > 0) break;
             }
 
-            if (newBookings.length > 0) break;
-        }
+            if (newBookings.length === 0) {
+                const availableSeats: number[] = Array.from({ length: TOTAL_SEATS }, (_, i) => i + 1).filter(
+                    (seat) => !isSeatBooked(seat)
+                );
+                newBookings = availableSeats.slice(0, numSeatsToBook);
+            }
+            setBookedSeats((prevSeats) => [...prevSeats, ...newBookings])
+            setBookedSeatsPreview(newBookings)
+            toast.success('Seat successfully booked', {
+                style: {
+                    background: 'green',
+                    color: 'white',
+                },
+            });
+            const response = await bookedSeatApi(newBookings);
+            console.log(response)
+        } catch (error) {
+            console.log(error);
 
-        if (newBookings.length === 0) {
-            const availableSeats: number[] = Array.from({ length: TOTAL_SEATS }, (_, i) => i + 1).filter(
-                (seat) => !isSeatBooked(seat)
-            );
-            newBookings = availableSeats.slice(0, numSeatsToBook);
         }
-        setBookedSeats((prevSeats) => [...prevSeats, ...newBookings])
-        setBookedSeatsPreview(newBookings)
-        toast.success('Seat successfully booked', {
-            style: {
-                background: 'green',
-                color: 'white',
-            },
-        });
 
     };
 
@@ -71,23 +78,23 @@ const TicketBooking: React.FC = () => {
             setNumSeatsToBook(Number(e.target.value))
         }
     }
-    console.log(bookedSeatsPreview)
+
 
     async function handleLogout(event: React.MouseEvent<HTMLElement>) {
         event.preventDefault();
-      
+
         try {
-          await axiosInstance.post(
-            `${process.env.NEXT_PUBLIC_USER_BACKEND_URL}/logout`,
-            {},
-            { withCredentials: true }
-          );
-          localStorage.removeItem("user");
-          window.location.href = "/user/login";
+            await axiosInstance.post(
+                `${process.env.NEXT_PUBLIC_USER_BACKEND_URL}/logout`,
+                {},
+                { withCredentials: true }
+            );
+            localStorage.removeItem("user");
+            window.location.href = "/user/login";
         } catch (error) {
-          console.error("Logout failed:", error);
+            console.error("Logout failed:", error);
         }
-      }
+    }
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 ">
             <div className="flex items-center justify-between p-2 bg-white shadow-md rounded-lg">

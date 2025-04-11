@@ -77,4 +77,40 @@ export class UserController implements IUserController {
     }
   };
 
+
+  seatBook = async (req:CustomRequest): Promise<ControllerResponse> => {
+    try {
+
+      const user = req.user;
+      const seatNumber = req.body;
+      const bookedSeat = await this.userService.seatBook(user,seatNumber);
+
+
+      return {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        statusCode: 200,
+        body: bookedSeat
+      };
+    } catch (e: any) {
+      console.log(e);
+      return {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        statusCode: e.statusCode || 500,
+        body: {
+          error: e.message,
+        },
+      };
+    }
+  };
+
+
+
 }
+
+
+
+

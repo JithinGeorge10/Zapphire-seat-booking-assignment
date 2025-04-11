@@ -1,4 +1,5 @@
 import { IUserRepository } from "../interface/repositories/userRepository.interface";
+import { Op } from 'sequelize';
 import {
     AddUserInput,
     AddUserOutput,
@@ -6,6 +7,10 @@ import {
 } from "../interface/repositories/userRepository.types";
 import { UniqueConstraintError } from "sequelize";
 import { User } from '../models/User';
+import { Seat } from "../models/Seats";
+import { UserPayload } from "../interface/services/userService.types";
+import { sequelize } from "../config/database";
+
 
 export class UserRepository implements IUserRepository {
     addUser = async (userData: AddUserInput): Promise<AddUserOutput> => {
@@ -42,9 +47,9 @@ export class UserRepository implements IUserRepository {
     getUserByEmail = async (email: string): Promise<GetUserOutput> => {
         try {
             const user = await User.findOne({ where: { email } });
-    
+
             if (!user) throw new Error("User not found");
-    
+
             return {
                 _id: user.id.toString(),
                 username: user.username,
@@ -59,7 +64,22 @@ export class UserRepository implements IUserRepository {
             throw new Error(error.message || "Something went wrong while retrieving user.");
         }
     };
-    
 
+        bookSeat = async ( userId: UserPayload,seatNumber: any) => {
+            try {
+                console.log(seatNumber)
+                console.log('ff'+userId)
+
+                const bookings = seatNumber.map((seatNumber: any) => ({
+                    seatNumber,
+                    bookedBy:userId,
+                }));
+        
+                await Seat.bulkCreate(bookings);
+
+                return { success: true, message: 'Seats booked successfully' };
+            } catch (error) {
+                console.log(error);
+            }
+        }
 }
-

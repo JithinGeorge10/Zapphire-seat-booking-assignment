@@ -29,3 +29,12 @@ export type SuccessResponse ={
   message: string;      
                
   }
+
+
+  export type UserPayload = {
+    map(arg0: (seatNumber: any) => { seatNumber: any; userId: any; }): unknown;
+    id: string;
+    role: string;
+    exp: number; // Expiry time (in seconds since epoch)
+    iat: number; 
+  };

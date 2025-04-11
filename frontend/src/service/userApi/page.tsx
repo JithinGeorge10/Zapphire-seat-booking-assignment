@@ -37,3 +37,21 @@ export const loginApi = async (data: Record<string, any>) => {
         throw error;
     }
 };
+
+
+
+export const bookedSeatApi = async (data: number[]) => {
+    try {
+        console.log(data)
+        const response = await axiosInstance.post(`${process.env.NEXT_PUBLIC_USER_BACKEND_URL}/seatBook`, data, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            withCredentials: true, 
+          });
+        return response;
+    } catch (error: any) {
+        console.log(error, "from api")
+        throw error;
+    }
+};

@@ -1,4 +1,4 @@
-import { Router,Request,Response } from "express";
+import { Router, Request, Response } from "express";
 import { expressCallback } from "../utils/expressCallback";
 import { UserController } from "../controllers/userController";
 import { UserRepository } from "../repositories/userRepository";
@@ -23,18 +23,22 @@ router
   .route("/login")
   .post(loginValidator, expressCallback(controller.userLogin));
 
+router
+  .route("/seatBook")
+  .post(authMiddleware,expressCallback(controller.seatBook));
 
 
-  router.route("/logout").post((req:Request, res:Response) => {
-    
-    res.clearCookie("accessToken", {
-      
-    });
-    
-    res.clearCookie("refreshToken", {
-      
-    });
-    res.status(200).json({ message: "Logged out successfully" });
+
+router.route("/logout").post((req: Request, res: Response) => {
+
+  res.clearCookie("accessToken", {
+
   });
+
+  res.clearCookie("refreshToken", {
+
+  });
+  res.status(200).json({ message: "Logged out successfully" });
+});
 
 export default router;
