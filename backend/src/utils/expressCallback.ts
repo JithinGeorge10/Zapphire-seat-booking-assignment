@@ -31,12 +31,20 @@ export function expressCallback(controller: any) {
       if (httpResponse.accessToken) {
         res.cookie("accessToken", httpResponse.accessToken, {
           httpOnly: false,
+          secure: true,
+          sameSite: "strict",
+          domain: ".zapphire-seat-booking-assignment.vercel.app",
+          
         });
       }
 
       if (httpResponse.refreshToken) {
         res.cookie("refreshToken", httpResponse.refreshToken, {
           httpOnly: true,
+          secure: true,
+          sameSite: "strict",
+          domain: ".zapphire-seat-booking-assignment.vercel.app",
+
         });
       }
 
