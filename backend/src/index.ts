@@ -26,6 +26,8 @@ const app = express();
 // };
 
 // app.use(cors(corsOptions)); 
+
+
 app.use(cors({
     origin: (origin, callback) => {
       const allowedOrigins = ['https://zapphire-seat-booking-assignment.vercel.app'];
