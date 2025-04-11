@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 
 export function expressCallback(controller: any) {
-  return async function (req:any, res: Response, next: NextFunction) {
-  
-    const file =req.file
+  return async function (req: any, res: Response, next: NextFunction) {
+
+    const file = req.file
     const httpRequest = {
       user: req.user || null,
-      file:file,
+      file: file,
       body: req.body,
       query: req.query,
       params: req.params,
@@ -31,17 +31,18 @@ export function expressCallback(controller: any) {
       if (httpResponse.accessToken) {
         res.cookie("accessToken", httpResponse.accessToken, {
           httpOnly: false,
+          sameSite: 'strict',
           secure: true,
-          sameSite: "lax" ,
-          
+          domain: '.zapphire-seat-booking-assignment.vercel.app/user/login'
         });
       }
 
       if (httpResponse.refreshToken) {
         res.cookie("refreshToken", httpResponse.refreshToken, {
           httpOnly: true,
+          sameSite: 'strict',
           secure: true,
-          sameSite: "lax" ,
+          domain: '.zapphire-seat-booking-assignment.vercel.app/user/login'
 
         });
       }
