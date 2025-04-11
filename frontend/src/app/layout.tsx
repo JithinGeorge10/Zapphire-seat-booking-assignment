@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { StoreProvider } from "./storeProvider";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from 'react-hot-toast';
@@ -27,7 +28,9 @@ export default function RootLayout({
     <html>
       <body>
         <Toaster position="bottom-center" />
-        {children}
+        <StoreProvider> 
+          {children}
+        </StoreProvider>
       </body>
     </html>
   );
