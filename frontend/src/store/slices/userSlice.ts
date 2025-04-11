@@ -10,19 +10,19 @@ interface UserState {
 }
 
 
-const initialState: UserState = { username: '', email: '', isAuthenticated: false,profilePic:null,userId:'' };
+const initialState: UserState = { username: '', email: '', isAuthenticated: false,userId:'' };
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
     setUserDetails: (state, action: PayloadAction<UserState>) => {
-      const { username, email, isAuthenticated,userId,profilePic } = action.payload;
+      const { username, email, isAuthenticated,userId } = action.payload;
       state.userId=userId
       state.username = username;
       state.email = email;
       state.isAuthenticated = isAuthenticated;
-      state.profilePic=profilePic
+
 
      
       if (typeof window !== 'undefined') {

@@ -8,7 +8,6 @@ const USER_ROUTES = new Set([ '/user/home']);
 const PUBLIC_ROUTES = new Set([
   "/user/login", 
   "/user/signup", 
- 
 ]);
 
 
@@ -17,9 +16,7 @@ const UNPROTECTED_ROUTES = new Set(["/_next/", "/favicon.ico", "/api/"]);
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  console.log(req)
 
- 
   if ([...UNPROTECTED_ROUTES].some(route => pathname.startsWith(route)) || pathname === "/") {
     console.log(`Allowing access to public route: ${pathname}`);
     return NextResponse.next();
@@ -33,13 +30,12 @@ export async function middleware(req: NextRequest) {
   // Verify token to get role
   const tokenData = await verifyToken("refreshToken", req);
   const role = tokenData?.role;
-
+  console.log('ROLEX',role)
   if (!role) {
     console.log(`Redirecting unauthenticated user from ${pathname} to /login`);
     return NextResponse.redirect(new URL("/user/login", req.url));
   }
 
- 
 
   if (role === "user" && !USER_ROUTES.has(pathname)) {
     console.log(`Unauthorized access attempt by user to ${pathname}. Redirecting to /userHome`);

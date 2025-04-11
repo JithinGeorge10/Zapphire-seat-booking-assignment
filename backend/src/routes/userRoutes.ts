@@ -25,16 +25,16 @@ router
 
 
 
-//   router.route("/logout").post((req:Request, res:Response) => {
+  router.route("/logout").post((req:Request, res:Response) => {
     
-//     res.clearCookie("accessToken", {
+    res.clearCookie("accessToken", {
       
-//     });
+    });
     
-//     res.clearCookie("refreshToken", {
+    res.clearCookie("refreshToken", {
       
-//     });
-//     res.status(200).json({ message: "Logged out successfully" });
-//   });
+    });
+    res.status(200).json({ message: "Logged out successfully" });
+  });
 
 export default router;
