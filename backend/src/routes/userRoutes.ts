@@ -25,7 +25,15 @@ router
 
 router
   .route("/seatBook")
-  .post(authMiddleware,expressCallback(controller.seatBook));
+  .post(authMiddleware, expressCallback(controller.seatBook));
+
+router
+  .route("/bookedSeats")
+  .get(authMiddleware, expressCallback(controller.bookedSeats));
+
+router
+  .route("/resetBookings")
+  .post(authMiddleware, expressCallback(controller.resetBookings));
 
 
 

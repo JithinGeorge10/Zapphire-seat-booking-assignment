@@ -69,15 +69,35 @@ export class UserService implements IUserService {
         }
     };
 
-    seatBook = async ( user: UserPayload,seatNumber: any) => {
+    seatBook = async (user: UserPayload, seatNumber: any) => {
         try {
 
-            const seat = await this.userRepository.bookSeat(user.id,seatNumber);
-            return {user}
+            const seat = await this.userRepository.bookSeat(user.id, seatNumber);
+            return { seat }
         } catch (error: any) {
             console.log("Error in user service", error.message);
             throw new Error(error.message);
         }
     };
 
+    bookedSeat = async () => {
+        try {
+
+            const seat = await this.userRepository.bookedSeat();
+            return { seat }
+        } catch (error: any) {
+            console.log("Error in user service", error.message);
+            throw new Error(error.message);
+        }
+    };
+
+    cancelTicket = async (userId: any) => {
+        try {
+            const seat = await this.userRepository.cancelSeat(userId);
+            return { seat }
+        } catch (error: any) {
+            console.log("Error in user service", error.message);
+            throw new Error(error.message);
+        }
+    };
 }

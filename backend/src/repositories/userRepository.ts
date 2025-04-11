@@ -82,4 +82,42 @@ export class UserRepository implements IUserRepository {
                 console.log(error);
             }
         }
+
+        
+        bookedSeat = async () => {
+            try {
+                const seats = await Seat.findAll({
+                    attributes: ['seatNumber']
+                });
+        
+                const seatNumbers = seats.map(seat => seat.seatNumber);
+                console.log(seatNumbers);
+                return seatNumbers;
+            } catch (error) {
+                console.log('Error fetching seats:', error);
+            }
+        };
+        
+        
+        
+        cancelSeat = async ( userId:any) => {
+            try {
+                const seats = await Seat.findAll({
+                    where: { bookedBy: userId },
+                    attributes: ['seatNumber']
+                });
+        
+                const seatNumbers = seats.map(seat => seat.seatNumber);
+        
+                // Delete all seats booked by this user
+                await Seat.destroy({
+                    where: { bookedBy: userId }
+                });
+        
+                return seatNumbers; // returning the cancelled seat numbers
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
 }

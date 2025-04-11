@@ -47,11 +47,43 @@ export const bookedSeatApi = async (data: number[]) => {
             headers: {
                 "Content-Type": "application/json",
             },
-            withCredentials: true, 
-          });
+            withCredentials: true,
+        });
         return response;
     } catch (error: any) {
         console.log(error, "from api")
         throw error;
     }
 };
+
+
+export const bookedSeatbyOtherUser = async () => {
+    try {
+        const response = await axiosInstance.get(
+            `${process.env.NEXT_PUBLIC_USER_BACKEND_URL}/bookedSeats`,
+            { withCredentials: true }
+        );
+        return response;
+    } catch (error: any) {
+        console.log(error, "from api")
+        throw error;
+    }
+};
+
+
+export const resetBookings = async () => {
+    try {
+
+        const response = await axiosInstance.post(`${process.env.NEXT_PUBLIC_USER_BACKEND_URL}/resetBookings`,{}, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            withCredentials: true,
+        });
+        return response;
+    } catch (error: any) {
+        console.log(error, "from api")
+        throw error;
+    }
+};
+

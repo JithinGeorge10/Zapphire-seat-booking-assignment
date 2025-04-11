@@ -78,12 +78,12 @@ export class UserController implements IUserController {
   };
 
 
-  seatBook = async (req:CustomRequest): Promise<ControllerResponse> => {
+  seatBook = async (req: CustomRequest): Promise<ControllerResponse> => {
     try {
 
       const user = req.user;
       const seatNumber = req.body;
-      const bookedSeat = await this.userService.seatBook(user,seatNumber);
+      const bookedSeat = await this.userService.seatBook(user, seatNumber);
 
 
       return {
@@ -107,6 +107,57 @@ export class UserController implements IUserController {
     }
   };
 
+
+
+  bookedSeats = async (req: CustomRequest): Promise<ControllerResponse> => {
+    try {
+    
+      const bookedSeat = await this.userService.bookedSeat();
+      return {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        statusCode: 200,
+        body: bookedSeat
+      };
+    } catch (e: any) {
+      console.log(e);
+      return {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        statusCode: e.statusCode || 500,
+        body: {
+          error: e.message,
+        },
+      };
+    }
+  };
+
+  resetBookings = async (req: CustomRequest): Promise<ControllerResponse> => {
+    try {
+      const userId = req.user?.id
+      const cancelTicket = await this.userService.cancelTicket(userId);
+      return {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        statusCode: 200,
+        body: cancelTicket
+      };
+    } catch (e: any) {
+      console.log(e);
+      return {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        statusCode: e.statusCode || 500,
+        body: {
+          error: e.message,
+        },
+      };
+    }
+  };
 
 
 }

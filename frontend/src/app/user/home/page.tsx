@@ -1,8 +1,8 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import axiosInstance from "../../../components/utils/axiosinstance";
-import { bookedSeatApi } from "../../../service/userApi/page";
+import { bookedSeatApi, bookedSeatbyOtherUser, resetBookings } from "../../../service/userApi/page";
 const ROW_SIZE = 7;
 const TOTAL_SEATS = 80;
 
@@ -12,7 +12,15 @@ const TicketBooking: React.FC = () => {
     const [numSeatsToBook, setNumSeatsToBook] = useState<number>(0);
     const [bookedSeatsPreview, setBookedSeatsPreview] = useState<number[]>([]);
 
-    const handleBooking = async(): Promise<void> => {
+    useEffect(()=>{
+        (async()=>{
+           const response= await bookedSeatbyOtherUser()
+           console.log(response.data.seat)
+           setBookedSeats(response.data.seat)
+        })()
+    },[])
+
+    const handleBooking = async (): Promise<void> => {
 
         try {
             if (numSeatsToBook > 7) {
@@ -67,10 +75,14 @@ const TicketBooking: React.FC = () => {
 
     };
 
-    const handleReset = () => {
+    const handleReset = async() => {
         setBookedSeats([]);
         setBookedSeatsPreview([])
         setNumSeatsToBook(0);
+        const cancelTickets=await resetBookings()
+        console.log(cancelTickets)
+        const response= await bookedSeatbyOtherUser()
+        setBookedSeats(response.data.seat)
     };
     const handleSeatChange = (e: any) => {
         console.log(e.target.value)
