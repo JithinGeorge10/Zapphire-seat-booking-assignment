@@ -33,7 +33,6 @@ export function expressCallback(controller: any) {
           httpOnly: false,
           secure: true,
           sameSite: "lax" ,
-          domain: ".zapphire-seat-booking-assignment.vercel.app",
           
         });
       }
@@ -43,7 +42,6 @@ export function expressCallback(controller: any) {
           httpOnly: true,
           secure: true,
           sameSite: "lax" ,
-          domain: ".zapphire-seat-booking-assignment.vercel.app",
 
         });
       }
