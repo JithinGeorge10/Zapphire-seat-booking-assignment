@@ -20,6 +20,12 @@ connectDB();
 
 const app = express();
 
+// const corsOptions = {
+//   origin: FRONTEND_URL() || "*",
+//   credentials: true,
+// };
+
+// app.use(cors(corsOptions)); 
 app.use(cors({
     origin: (origin, callback) => {
       const allowedOrigins = ['https://zapphire-seat-booking-assignment.vercel.app'];
@@ -32,7 +38,6 @@ app.use(cors({
     credentials: true
   }));
   
-
     
 app.use(express.json());
 app.use(cookieParser());
