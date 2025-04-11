@@ -34,8 +34,8 @@ export function expressCallback(controller: any) {
           sameSite: 'strict',
           secure: process.env.NODE_ENV === 'production',
           path: '/',
-          maxAge: 60 * 60 * 24 * 7
-          // domain: '.zapphire-seat-booking-assignment.vercel.app'
+          maxAge: 60 * 60 * 24 * 7,
+          domain: '.zapphire-seat-booking-assignment.vercel.app'
         });
       }
 
@@ -45,10 +45,10 @@ export function expressCallback(controller: any) {
           sameSite: 'strict',
           secure: process.env.NODE_ENV === 'production',
           path: '/',
-          maxAge: 60 * 60 * 24 * 7
+          maxAge: 60 * 60 * 24 * 7,
           // sameSite: 'strict',
           // secure: true,
-          // domain: '.zapphire-seat-booking-assignment.vercel.app'
+           domain: '.zapphire-seat-booking-assignment.vercel.app'
 
         });
       }
