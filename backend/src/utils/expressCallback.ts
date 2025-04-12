@@ -31,10 +31,8 @@ export function expressCallback(controller: any) {
       if (httpResponse.accessToken) {
         res.cookie("accessToken", httpResponse.accessToken, {
           httpOnly: false,
-          sameSite: 'strict',
-          secure: process.env.NODE_ENV === 'production',
-          path: '/',
-          maxAge: 60 * 60 * 24 * 7,
+          secure: true,
+          sameSite: "strict",
           domain: '.zapphire-seat-booking-assignment.vercel.app'
         });
       }
@@ -42,14 +40,9 @@ export function expressCallback(controller: any) {
       if (httpResponse.refreshToken) {
         res.cookie("refreshToken", httpResponse.refreshToken, {
           httpOnly: true,
-          sameSite: 'strict',
-          secure: process.env.NODE_ENV === 'production',
-          path: '/',
-          maxAge: 60 * 60 * 24 * 7,
-          // sameSite: 'strict',
-          // secure: true,
-           domain: '.zapphire-seat-booking-assignment.vercel.app'
-
+          secure: true,
+          sameSite: "strict",
+          domain: '.zapphire-seat-booking-assignment.vercel.app'
         });
       }
 
