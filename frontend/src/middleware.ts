@@ -72,8 +72,7 @@ async function verifyToken(tokenName: string, req: NextRequest): Promise<{ role:
     // Verify the token using jose's jwtVerify function
     const { payload } = await jwtVerify(token.value, new TextEncoder().encode(secret));
     console.log('decoded payload', payload);
-
-
+    
     const role = payload?.role as string | undefined;  // Type assertion to string
 
     if (!role) {
