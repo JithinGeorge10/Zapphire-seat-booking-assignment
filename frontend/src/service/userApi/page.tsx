@@ -1,4 +1,6 @@
 import axiosInstance from '../../components/utils/axiosinstance';
+import Cookies from 'js-cookie';
+
 export const handleAxiosErrorlogin = (error: any) => {
     console.log(error)
     const errorMessage = error?.response?.data?.errorMessage || "Unexpected error occurred"
@@ -14,6 +16,7 @@ export const signupApi = async (data: Record<string, any>) => {
             data,
             { withCredentials: true }
         )
+        Cookies.set('accessToken', response.data.access_token);
         return response;
     } catch (error: any) {
         console.log(error, "from api")
@@ -30,7 +33,7 @@ export const loginApi = async (data: Record<string, any>) => {
             data,
             { withCredentials: true }
         );
-
+        Cookies.set('accessToken', response.data.access_token);
         return response;
     } catch (error: any) {
         console.log(error, "from api")
