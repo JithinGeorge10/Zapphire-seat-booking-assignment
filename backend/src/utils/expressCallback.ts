@@ -33,7 +33,7 @@ export function expressCallback(controller: any) {
           httpOnly: false,
           secure: true,
           sameSite: "none",
-          domain: '.zapphire-seat-booking-assi-git-a22048-jithins-projects-21077d3d.vercel.app/'
+          domain: '.zapphire-seat-booking-assignment.vercel.app'
         });
       }
 
@@ -42,7 +42,7 @@ export function expressCallback(controller: any) {
           httpOnly: true,
           secure: true,
           sameSite: "none",
-          domain: '.zapphire-seat-booking-assi-git-a22048-jithins-projects-21077d3d.vercel.app/'
+          domain: '.zapphire-seat-booking-assignment.vercel.app'
         });
       }
 

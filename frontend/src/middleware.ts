@@ -51,7 +51,7 @@ export async function middleware(req: NextRequest,res:any) {
 async function verifyToken(tokenName: string, req: NextRequest): Promise<{ role: string | null }> {
 
   const token = req.cookies.get(tokenName);
-  console.log('hhh');
+  
   
   console.log(req.cookies);
   console.log(token?.value, '------------------------------------------');
@@ -72,7 +72,7 @@ async function verifyToken(tokenName: string, req: NextRequest): Promise<{ role:
     // Verify the token using jose's jwtVerify function
     const { payload } = await jwtVerify(token.value, new TextEncoder().encode(secret));
     console.log('decoded payload', payload);
-    
+
     const role = payload?.role as string | undefined;  // Type assertion to string
 
     if (!role) {
