@@ -16,7 +16,8 @@ const TicketBooking: React.FC = () => {
     useEffect(() => {
         (async () => {
             const response = await verifyJwt()
-            if(response==false){
+            console.log(response)
+            if(response==false || undefined){
                 router.replace("/user/login");
             }
         })()
