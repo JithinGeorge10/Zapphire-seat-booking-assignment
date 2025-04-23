@@ -9,8 +9,9 @@ import { UniqueConstraintError } from "sequelize";
 import { User } from '../models/User';
 import { Seat } from "../models/Seats";
 import { UserPayload } from "../interface/services/userService.types";
-import { sequelize } from "../config/database";
-
+import jwt from 'jsonwebtoken'
+import { JwtBlackList } from "../models/jwtBlackList";
+import {JWT_SECRET} from '../utils/constants'
 
 export class UserRepository implements IUserRepository {
     addUser = async (userData: AddUserInput): Promise<AddUserOutput> => {
@@ -65,59 +66,86 @@ export class UserRepository implements IUserRepository {
         }
     };
 
-        bookSeat = async ( userId: UserPayload,seatNumber: any) => {
-            try {
-                console.log(seatNumber)
-                console.log('ff'+userId)
+    bookSeat = async (userId: UserPayload, seatNumber: any) => {
+        try {
+            const bookings = seatNumber.map((seatNumber: any) => ({
+                seatNumber,
+                bookedBy: userId,
+            }));
 
-                const bookings = seatNumber.map((seatNumber: any) => ({
-                    seatNumber,
-                    bookedBy:userId,
-                }));
-        
-                await Seat.bulkCreate(bookings);
+            await Seat.bulkCreate(bookings);
 
-                return { success: true, message: 'Seats booked successfully' };
-            } catch (error) {
-                console.log(error);
-            }
+            return { success: true, message: 'Seats booked successfully' };
+        } catch (error) {
+            console.log(error);
         }
+    }
 
-        
-        bookedSeat = async () => {
-            try {
-                const seats = await Seat.findAll({
-                    attributes: ['seatNumber']
-                });
-        
-                const seatNumbers = seats.map(seat => seat.seatNumber);
-                console.log(seatNumbers);
-                return seatNumbers;
-            } catch (error) {
-                console.log('Error fetching seats:', error);
-            }
-        };
-        
-        
-        
-        cancelSeat = async ( userId:any) => {
-            try {
-                const seats = await Seat.findAll({
-                    where: { bookedBy: userId },
-                    attributes: ['seatNumber']
-                });
-        
-                const seatNumbers = seats.map(seat => seat.seatNumber);
-        
-                // Delete all seats booked by this user
-                await Seat.destroy({
-                    where: { bookedBy: userId }
-                });
-        
-                return seatNumbers; // returning the cancelled seat numbers
 
-            } catch (error) {
-                console.log(error);
-            }
+    bookedSeat = async () => {
+        try {
+            const seats = await Seat.findAll({
+                attributes: ['seatNumber']
+            });
+
+            const seatNumbers = seats.map(seat => seat.seatNumber);
+            console.log(seatNumbers);
+            return seatNumbers;
+        } catch (error) {
+            console.log('Error fetching seats:', error);
         }
+    };
+
+
+
+    cancelSeat = async (userId: any) => {
+        try {
+            const seats = await Seat.findAll({
+                where: { bookedBy: userId },
+                attributes: ['seatNumber']
+            });
+
+            const seatNumbers = seats.map(seat => seat.seatNumber);
+
+            // Delete all seats booked by this user
+            await Seat.destroy({
+                where: { bookedBy: userId }
+            });
+
+            return seatNumbers; // returning the cancelled seat numbers
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
+
+     verifyJwt = async (token: any) => {
+        try {
+            if (!token) {
+                return 'you are not authenticated';
+            }
+    
+            const isBlackListed = await JwtBlackList.findOne({ where: { token: token } });
+            if (isBlackListed) {
+                return 'Token is not valid';
+            }
+    
+            return new Promise((resolve, reject) => {
+                jwt.verify(token, JWT_SECRET(), (err:any, payload:any) => {
+                    if (err) {
+                        resolve('token is not valid');
+                    } else {
+                        resolve({ success: 'true' });
+                    }
+                });
+            });
+    
+        } catch (error) {
+            console.log(error);
+            return 'Something went wrong';
+        }
+    };
+    
 }

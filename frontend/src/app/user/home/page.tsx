@@ -3,22 +3,44 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import axiosInstance from "../../../components/utils/axiosinstance";
 import { bookedSeatApi, bookedSeatbyOtherUser, resetBookings } from "../../../service/userApi/page";
+import { verifyJwt } from '../../../service/loginService';
+import { useRouter } from 'next/navigation';
+
 const ROW_SIZE = 7;
 const TOTAL_SEATS = 80;
 
 
 const TicketBooking: React.FC = () => {
+    const [isAuthenticated, setIsauthenticated] = useState<String>('')
+    const router = useRouter();
+    useEffect(() => {
+        (async () => {
+            const response = await verifyJwt()
+            console.log({ response });
+            setIsauthenticated(response)
+            if(response==false){
+                router.replace("/user/login");
+            }
+        })()
+    }, [])
+    console.log(isAuthenticated);
+ 
+
+    if (isAuthenticated === null) {
+        return <div>Loading...</div>; // or a spinner
+    }
+
     const [bookedSeats, setBookedSeats] = useState<number[]>([]);
     const [numSeatsToBook, setNumSeatsToBook] = useState<number>(0);
     const [bookedSeatsPreview, setBookedSeatsPreview] = useState<number[]>([]);
 
-    useEffect(()=>{
-        (async()=>{
-           const response= await bookedSeatbyOtherUser()
-           console.log(response.data.seat)
-           setBookedSeats(response.data.seat)
+    useEffect(() => {
+        (async () => {
+            const response = await bookedSeatbyOtherUser()
+            console.log(response.data.seat)
+            setBookedSeats(response.data.seat)
         })()
-    },[])
+    }, [])
 
     const handleBooking = async (): Promise<void> => {
 
@@ -75,13 +97,13 @@ const TicketBooking: React.FC = () => {
 
     };
 
-    const handleReset = async() => {
+    const handleReset = async () => {
         setBookedSeats([]);
         setBookedSeatsPreview([])
         setNumSeatsToBook(0);
-        const cancelTickets=await resetBookings()
+        const cancelTickets = await resetBookings()
         console.log(cancelTickets)
-        const response= await bookedSeatbyOtherUser()
+        const response = await bookedSeatbyOtherUser()
         setBookedSeats(response.data.seat)
     };
     const handleSeatChange = (e: any) => {
@@ -163,7 +185,7 @@ const TicketBooking: React.FC = () => {
                         <input
 
                             className="border border-blue-600 p-2 text-blue-500 rounded-md min-w-96"
-                    
+
                             min={1}
                             max={TOTAL_SEATS - bookedSeats.length}
                             onChange={handleSeatChange}

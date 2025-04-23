@@ -100,4 +100,15 @@ export class UserService implements IUserService {
             throw new Error(error.message);
         }
     };
+
+    verifyJwt = async (token: any) => {
+        try {
+            const seat = await this.userRepository.verifyJwt(token);
+            return { seat }
+        } catch (error: any) {
+            console.log("Error in user service", error.message);
+            throw new Error(error.message);
+        }
+    };
+
 }

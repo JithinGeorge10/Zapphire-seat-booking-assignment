@@ -13,6 +13,7 @@ export function expressCallback(controller: any) {
       ip: req.ip,
       method: req.method,
       path: req.path,
+      cookies:req.cookies,
       headers: {
         "Content-Type": req.get("Content-Type"),
         Referer: req.get("referer"),
@@ -31,18 +32,18 @@ export function expressCallback(controller: any) {
       if (httpResponse.accessToken) {
         res.cookie("accessToken", httpResponse.accessToken, {
           httpOnly: false,
-          secure: true,
-          sameSite: "none",
-          domain: '.zapphire-seat-booking-assignment.vercel.app'
+          // secure: true,
+          // sameSite: "none",
+          // domain: '.zapphire-seat-booking-assignment.vercel.app'
         });
       }
 
       if (httpResponse.refreshToken) {
         res.cookie("refreshToken", httpResponse.refreshToken, {
           httpOnly: true,
-          secure: true,
-          sameSite: "none",
-          domain: '.zapphire-seat-booking-assignment.vercel.app'
+          // secure: true,
+          // sameSite: "none",
+          // domain: '.zapphire-seat-booking-assignment.vercel.app'
         });
       }
 

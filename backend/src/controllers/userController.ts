@@ -3,6 +3,16 @@ import { IUserController } from "../interface/controllers/userController.interfa
 import { ControllerResponse } from "../interface/controllers/userController.types";
 import { IUserService } from "../interface/services/userService.interface";
 import { CustomRequest } from "../middlewares/validators/jwt/authentication";
+import { JwtBlackList } from "../models/jwtBlackList";
+import jwt, { JwtPayload } from 'jsonwebtoken';
+
+import { JWT_SECRET } from '../../src/utils/constants'; // adjust path
+interface UserPayload extends JwtPayload {
+  id: string;
+  role?: string;
+  user?: UserPayload;
+}
+
 export class UserController implements IUserController {
   private userService: IUserService;
 
@@ -111,7 +121,7 @@ export class UserController implements IUserController {
 
   bookedSeats = async (req: CustomRequest): Promise<ControllerResponse> => {
     try {
-    
+
       const bookedSeat = await this.userService.bookedSeat();
       return {
         headers: {
@@ -159,6 +169,32 @@ export class UserController implements IUserController {
     }
   };
 
+
+
+  verifyJwt = async (req: Request) => {
+    try {
+      const token = req.cookies.refreshToken
+      const verifyStatus = await this.userService.verifyJwt(token);
+      return {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        statusCode: 200,
+         body: verifyStatus
+      };
+    } catch (e: any) {
+      console.log(e);
+      return {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        statusCode: e.statusCode || 500,
+        body: {
+          error: e.message,
+        },
+      };
+    }
+  };
 
 }
 

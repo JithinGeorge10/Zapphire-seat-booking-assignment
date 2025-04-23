@@ -2,6 +2,7 @@ import { Sequelize } from 'sequelize-typescript';
 import { User } from '../models/User';
 import {DB_NAME,DB_USER,DB_PASSWORD,DB_HOST} from '../utils/constants'
 import { Seat } from '../models/Seats';
+import { JwtBlackList } from '../models/jwtBlackList';
 export const sequelize = new Sequelize({
     database: DB_NAME(),
     username: DB_USER(),
@@ -9,7 +10,7 @@ export const sequelize = new Sequelize({
     host: DB_HOST(),
     port: 5432,  
     dialect: 'postgres',
-    models: [User,Seat],
+    models: [User,Seat,JwtBlackList],
     logging: false,
     ssl: true,  
     dialectOptions: {

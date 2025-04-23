@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { jwtVerify } from "jose";
+// import { jwtVerify } from "jose";
 
 
 
@@ -28,62 +28,62 @@ export async function middleware(req: NextRequest,res:any) {
   }
 
   // Verify token to get role
-  const tokenData = await verifyToken("refreshToken", req);
-  const role = tokenData?.role;
-  console.log('ROLEX', role)
-  if (!role) {
-    console.log(`Redirecting unauthenticated user from ${pathname} to /login`);
-    return NextResponse.redirect(new URL("/user/login", req.url));
-  }
+  // const tokenData = await verifyToken("refreshToken", req);
+  // const role = tokenData?.role;
+  // console.log('ROLEX', role)
+  // if (!role) {
+  //   console.log(`Redirecting unauthenticated user from ${pathname} to /login`);
+  //   return NextResponse.redirect(new URL("/user/login", req.url));
+  // }
 
 
-  if (role === "user" && !USER_ROUTES.has(pathname)) {
-    console.log(`Unauthorized access attempt by user to ${pathname}. Redirecting to /userHome`);
-    return NextResponse.redirect(new URL("/user/home", req.url));
-  }
+  // if (role === "user" && !USER_ROUTES.has(pathname)) {
+  //   console.log(`Unauthorized access attempt by user to ${pathname}. Redirecting to /userHome`);
+  //   return NextResponse.redirect(new URL("/user/home", req.url));
+  // }
 
-  console.log(`Allowing access to ${pathname} for role: ${role}`);
+  // console.log(`Allowing access to ${pathname} for role: ${role}`);
   return NextResponse.next();
 }
 
 
 
-async function verifyToken(tokenName: string, req: NextRequest): Promise<{ role: string | null }> {
+// async function verifyToken(tokenName: string, req: NextRequest): Promise<{ role: string | null }> {
 
-  const token = req.cookies.get(tokenName);
+//   const token = req.cookies.get(tokenName);
   
   
-  console.log(req.cookies);
-  console.log(token?.value, '------------------------------------------');
+//   console.log(req.cookies);
+//   console.log(token?.value, '------------------------------------------');
 
-  if (!token?.value) {
-    console.error("Token not found in cookies");
-    return { role: null };
-  }
+//   if (!token?.value) {
+//     console.error("Token not found in cookies");
+//     return { role: null };
+//   }
 
-  const secret = process.env.JWT_SECRET;  // Retrieve the secret from environment variables
-  console.log('secret', secret);
-  if (!secret) {
-    console.error("JWT_SECRET is not defined in environment variables");
-    return { role: null };
-  }
+//   const secret = process.env.JWT_SECRET;  // Retrieve the secret from environment variables
+//   console.log('secret', secret);
+//   if (!secret) {
+//     console.error("JWT_SECRET is not defined in environment variables");
+//     return { role: null };
+//   }
 
-  try {
-    // Verify the token using jose's jwtVerify function
-    const { payload } = await jwtVerify(token.value, new TextEncoder().encode(secret));
-    console.log('decoded payload', payload);
+//   try {
+//     // Verify the token using jose's jwtVerify function
+//     const { payload } = await jwtVerify(token.value, new TextEncoder().encode(secret));
+//     console.log('decoded payload', payload);
 
-    const role = payload?.role as string | undefined;  // Type assertion to string
+//     const role = payload?.role as string | undefined;  // Type assertion to string
 
-    if (!role) {
-      console.error("Role not found in token payload");
-      return { role: null };
-    }
+//     if (!role) {
+//       console.error("Role not found in token payload");
+//       return { role: null };
+//     }
 
-    console.log(`Verified role: ${role}`);
-    return { role };  // Return the role
-  } catch (err: any) {
-    console.error(`Failed to verify token: ${err.message}`);
-    return { role: null };  // Return null if token verification fails
-  }
-}
+//     console.log(`Verified role: ${role}`);
+//     return { role };  // Return the role
+//   } catch (err: any) {
+//     console.error(`Failed to verify token: ${err.message}`);
+//     return { role: null };  // Return null if token verification fails
+//   }
+// }

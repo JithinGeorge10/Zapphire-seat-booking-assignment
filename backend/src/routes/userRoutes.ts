@@ -1,4 +1,5 @@
 import { Router, Request, Response } from "express";
+import { JwtBlackList } from "../models/jwtBlackList";
 import { expressCallback } from "../utils/expressCallback";
 import { UserController } from "../controllers/userController";
 import { UserRepository } from "../repositories/userRepository";
@@ -35,18 +36,29 @@ router
   .route("/resetBookings")
   .post(authMiddleware, expressCallback(controller.resetBookings));
 
+  router
+  .route("/verify-jwt")
+  .post(expressCallback(controller.verifyJwt));
 
 
-router.route("/logout").post((req: Request, res: Response) => {
+router.route("/logout").post(async(req: Request, res: Response) => {
+  console.log(req.cookies.accessToken)
+  const token = req.cookies.accessToken;
 
-  res.clearCookie("accessToken", {
+  if(token){
+    await JwtBlackList.create({ token });
+    res.clearCookie("accessToken", {
 
-  });
+    });
+  
+    res.clearCookie("refreshToken", {
+  
+    });
+    res.status(200).json({ message: "Logged out successfully" });
+  }
 
-  res.clearCookie("refreshToken", {
-
-  });
-  res.status(200).json({ message: "Logged out successfully" });
 });
+
+
 
 export default router;
