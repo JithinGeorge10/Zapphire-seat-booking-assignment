@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const verifyJwt = async () => {
   try {
-    let response = await axios.post(`${process.env.NEXT_PUBLIC_USER_BACKEND_URL}/verify-jwt`, {}, {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_USER_BACKEND_URL}/verify-jwt`, {}, {
       headers: {
         "Content-Type": "application/json",
       },

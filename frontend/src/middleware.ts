@@ -3,8 +3,6 @@ import type { NextRequest } from "next/server";
 // import { jwtVerify } from "jose";
 
 
-
-const USER_ROUTES = new Set(['/user/home']);
 const PUBLIC_ROUTES = new Set([
   "/user/login",
   "/user/signup",
@@ -14,7 +12,7 @@ const PUBLIC_ROUTES = new Set([
 
 const UNPROTECTED_ROUTES = new Set(["/_next/", "/favicon.ico", "/api/"]);
 
-export async function middleware(req: NextRequest,res:any) {
+export async function middleware(req: NextRequest) {
   
   const { pathname } = req.nextUrl;
   if ([...UNPROTECTED_ROUTES].some(route => pathname.startsWith(route)) || pathname === "/") {
