@@ -26,15 +26,15 @@ router
 
 router
   .route("/seatBook")
-  .post(authMiddleware, expressCallback(controller.seatBook));
+  .post( expressCallback(controller.seatBook));
 
 router
   .route("/bookedSeats")
-  .get(authMiddleware, expressCallback(controller.bookedSeats));
+  .get( expressCallback(controller.bookedSeats));
 
 router
   .route("/resetBookings")
-  .post(authMiddleware, expressCallback(controller.resetBookings));
+  .post( expressCallback(controller.resetBookings));
 
   router
   .route("/verify-jwt")
