@@ -11,24 +11,17 @@ const TOTAL_SEATS = 80;
 
 
 const TicketBooking: React.FC = () => {
-    const [isAuthenticated, setIsauthenticated] = useState<String>('')
+
     const router = useRouter();
     useEffect(() => {
         (async () => {
             const response = await verifyJwt()
             console.log({ response });
-            setIsauthenticated(response)
             if(response==false){
                 router.replace("/user/login");
             }
         })()
     }, [])
-    console.log(isAuthenticated);
- 
-
-    if (isAuthenticated === null) {
-        return <div>Loading...</div>; // or a spinner
-    }
 
     const [bookedSeats, setBookedSeats] = useState<number[]>([]);
     const [numSeatsToBook, setNumSeatsToBook] = useState<number>(0);
