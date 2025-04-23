@@ -47,13 +47,7 @@ router.route("/logout").post(async(req: Request, res: Response) => {
 
   if(token){
     await JwtBlackList.create({ token });
-    res.clearCookie("accessToken", {
-
-    });
   
-    res.clearCookie("refreshToken", {
-  
-    });
     res.status(200).json({ message: "Logged out successfully" });
   }
 
